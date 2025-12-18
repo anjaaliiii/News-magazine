@@ -7,10 +7,20 @@ const NewsBoard = ({category}) => {
    
     const [articles,setArticles] = useState([]);
 
-    useEffect(()=>{
-        const url = `https://gnews.io/api/v4/top-headlines?country=us&lang=en&apikey=${import.meta.env.VITE_GNEWS_API_KEY}`;
-        fetch(url).then(response=>response.json()).then(data => {console.log(data); setArticles(data.articles || []);}).catch(err => console.error(err));
-    },[]);
+   useEffect(() => {
+  console.log("API KEY:", import.meta.env.VITE_GNEWS_API_KEY);
+
+  const url = `https://gnews.io/api/v4/top-headlines?country=us&lang=en&apikey=${import.meta.env.VITE_GNEWS_API_KEY}`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      console.log("GNEWS RESPONSE:", data);
+      setArticles(data.articles || []);
+    })
+    .catch(err => console.error("FETCH ERROR:", err));
+}, []);
+
   return (
     <div>
        <h2 className="text-center">Latest <span className="badge bg-danger">News</span></h2>
