@@ -8,10 +8,9 @@ const NewsBoard = ({category}) => {
     const [articles,setArticles] = useState([]);
 
     useEffect(()=>{
-        let url = `https://corsproxy.io/?https://newsapi.org/v2/top-headlines?country=in&category=${category}&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`;
-
-        fetch(url).then(response=>response.json()).then(data => setArticles(data.articles));
-    },[])
+        const url = `https://gnews.io/api/v4/top-headlines?country=us&lang=en&apikey=${import.meta.env.VITE_GNEWS_API_KEY}`;
+        fetch(url).then(response=>response.json()).then(data => {console.log(data); setArticles(data.articles || []);}).catch(err => console.error(err));
+    },[]);
   return (
     <div>
        <h2 className="text-center">Latest <span className="badge bg-danger">News</span></h2>
@@ -19,16 +18,19 @@ const NewsBoard = ({category}) => {
   <p className="text-center mt-4">No news available right now.</p>
 )}
 
-{Array.isArray(articles) && articles.map((news, index) => {
-  return (
-    <NewsItem
-      key={index}
-      title={news.title}
-      description={news.description}
-      src={news.urlToImage}
-    />
-  );
-})}
+{articles.length === 0 && (
+  <p className="text-center mt-4">No news available right now.</p>
+)}
+
+{Array.isArray(articles) && articles.map((news, index) => (
+  <NewsItem
+    key={index}
+    title={news.title}
+    description={news.description}
+    src={news.image}
+  />
+))}
+
 
        
     
